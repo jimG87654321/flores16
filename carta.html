@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una carta para ti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            width: 350px;
+            height: 250px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: #f4e4c1;
+            border-radius: 10px;
+            position: absolute;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .envelope-front {
+            width: 0;
+            height: 0;
+            border-left: 175px solid transparent;
+            border-right: 175px solid transparent;
+            border-bottom: 150px solid #e8d4a0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transition: transform 1s ease;
+            z-index: 3;
+            cursor: pointer;
+        }
+
+        .envelope.open .envelope-front {
+            transform: rotateX(180deg);
+        }
+
+        .letter {
+            width: 320px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            position: absolute;
+            top: 30px;
+            left: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 1s ease 0.3s;
+            z-index: 2;
+        }
+
+        .envelope.open .letter {
+            transform: translateY(-280px);
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #764ba2;
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .letter-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 22px;
+            color: #667eea;
+            margin-top: 30px;
+        }
+
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: rise 4s infinite;
+            opacity: 0;
+        }
+
+        @keyframes rise {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-500px) scale(1);
+            }
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: -60px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #8B4513;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: #f4e4c1;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-back"></div>
+            <div class="stamp">💌</div>
+            <div class="letter">
+                <div class="letter-header">Para Nikoll ✨</div>
+                <div class="letter-content">
+                    Hola Nikoll,
+                    <br><br>
+                    Aunque hace poco que nos conocimos, quiero que sepas que me pareces una persona increíble. Tu sonrisa ilumina cualquier momento y tu forma de ser hace que todo sea más especial.
+                    <br><br>
+                    Es bonito conocer personas como tú, que con su alegría y autenticidad hacen que los días sean mejores. Esta flor amarilla es un pequeño detalle para recordarte lo especial que eres.
+                    <br><br>
+                    Espero que podamos compartir muchos más momentos juntos y que esta amistad que está comenzando sea el inicio de algo muy bonito. ¡Gracias por ser como eres!
+                </div>
+                <div class="letter-signature">Con cariño 💛</div>
+            </div>
+            <div class="envelope-front"></div>
+            <div class="instruction">👆 Haz click en el sobre para abrirlo</div>
+        </div>
+    </div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const heartsContainer = document.getElementById('hearts');
+
+        envelope.addEventListener('click', function() {
+            envelope.classList.toggle('open');
+            
+            if (envelope.classList.contains('open')) {
+                createHearts();
+            }
+        });
+
+        function createHearts() {
+            const heartEmojis = ['💛', '💫', '✨', '🌟', '⭐'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    heartsContainer.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
